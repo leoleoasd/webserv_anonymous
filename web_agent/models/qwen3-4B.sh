@@ -5,7 +5,7 @@
 
 MODEL_CONFIG=qwen3-4B-Instruct-2507
 HF_MODEL_NAME=Qwen/Qwen3-4B-Thinking-2507
-source "${REPO_ROOT}/thirdparty/slime/scripts/models/${MODEL_CONFIG}.sh"
+source "${REPO_ROOT}/dependencies/slime/scripts/models/${MODEL_CONFIG}.sh"
 
 NUM_ASYNC_ROLLOUT_WORKERS=32
 

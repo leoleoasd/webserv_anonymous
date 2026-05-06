@@ -59,10 +59,10 @@ version = "0.1.0"
 apex = {git = "https://github.com/NVIDIA/apex.git", rev = "10417aceddd7d5d05d7cbf7b0fc2daad1105f8b4"}
 mbridge = {git = "https://github.com/ISEEKYAN/mbridge.git", rev = "89eb10887887bc74853f89a4de258c0702932a1c"}
 megatron-bridge = {git = "https://github.com/fzyzcjy/Megatron-Bridge.git", rev = "dev_rl"}
-megatron-core = {git = "https://github.com/leoleoasd/Megatron-LM.git", rev = "slime_patch_v2"}
-sglang = {git = "https://github.com/leoleoasd/sglang.git", subdirectory = "python", rev = "slime_patch"}
-slime = {path = "thirdparty/slime", editable = true}
-rl-web-agent = {path = "thirdparty/rl_web_agent", editable = true}
+megatron-core = {git = "https://github.com/anonymous/Megatron-LM.git", rev = "slime_patch_v2"}
+sglang = {git = "https://github.com/anonymous/sglang.git", subdirectory = "python", rev = "slime_patch"}
+slime = {path = "dependencies/slime", editable = true}
+rl-web-agent = {path = "dependencies/rl_web_agent", editable = true}
 torch = [
   {index = "pytorch-cu128", marker = "sys_platform == 'linux' or sys_platform == 'win32'"},
 ]
@@ -70,8 +70,8 @@ torch-memory-saver = {git = "https://github.com/fzyzcjy/torch_memory_saver.git",
 torchvision = [
   {index = "pytorch-cu128", marker = "sys_platform == 'linux' or sys_platform == 'win32'"},
 ]
-batch-inference = { git = "ssh://git@github.com/leoleoasd/bedrock-batch-inference-bridge.git" }
-bfcl_eval = {path = "thirdparty/bfcl", editable = true}
+batch-inference = { git = "ssh://git@github.com/anonymous/bedrock-batch-inference-bridge.git" }
+bfcl_eval = {path = "dependencies/bfcl", editable = true}
 sglang-router = { url = "https://github.com/zhuzilin/sgl-router/releases/download/v0.3.2-5f8d397/sglang_router-0.3.2-cp38-abi3-manylinux_2_28_x86_64.whl" }
 mooncake-transfer-engine = { path = "wheels/mooncake_transfer_engine-0.3.10.post2-cp312-cp312-manylinux_2_39_x86_64.whl" }
 uccl-ep = { path = "wheels/uccl_ep-0.0.2+a1ef8418-cp312-abi3-linux_x86_64.whl" }
@@ -119,7 +119,7 @@ include = ["shared*", "scripts*", "tool_call_agent*", "web_agent*"]
 [tool.ruff]
 target-version = "py312"
 line-length = 120
-exclude = ["thirdparty"]
+exclude = ["dependencies"]
 
 [tool.ruff.format]
 quote-style = "double"

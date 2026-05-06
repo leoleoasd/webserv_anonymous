@@ -1,2 +1,0 @@
-[console_scripts]
-bfcl = bfcl_eval.__main__:cli

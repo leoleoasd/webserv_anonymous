@@ -26,7 +26,7 @@ set -e
 
 source /workdir/.venv/bin/activate
 
-SLIME_DIR="/workdir/thirdparty/slime"
+SLIME_DIR="/workdir/dependencies/slime"
 MODELS_CONFIG_DIR="${SLIME_DIR}/scripts/models"
 DEFAULT_STORAGE="/tmp/instance_storage"
 

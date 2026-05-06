@@ -5,7 +5,7 @@
 
 MODEL_CONFIG=llama3.1-8B-Instruct
 HF_MODEL_NAME=checkpoints/rl_web_agent/web_agent_sft_128k_llama-3.1-lr1e5-fix-chat-template-hf/iter_0000044_hf
-source "${REPO_ROOT}/thirdparty/slime/scripts/models/${MODEL_CONFIG}.sh"
+source "${REPO_ROOT}/dependencies/slime/scripts/models/${MODEL_CONFIG}.sh"
 
 # Override tool call parser for Llama 3.1
 export TOOL_CALL_PARSER=llama3

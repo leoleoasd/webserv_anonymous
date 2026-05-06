@@ -1,4 +1,4 @@
-ARG REPO=248189905876.dkr.ecr.us-east-1.amazonaws.com/greenland
+ARG REPO=YOUR_ECR_REPO
 ARG BASE_TAG=base
 FROM ${REPO}:${BASE_TAG}
 
@@ -13,9 +13,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install python3-dev
 COPY pyproject.toml /workdir/pyproject.toml
 COPY uv.lock /workdir/uv.lock
 COPY .python-version /workdir/.python-version
-COPY thirdparty/slime/pyproject.toml /workdir/thirdparty/slime/pyproject.toml
-COPY thirdparty/rl_web_agent/pyproject.toml /workdir/thirdparty/rl_web_agent/pyproject.toml
-COPY thirdparty/bfcl/pyproject.toml /workdir/thirdparty/bfcl/pyproject.toml
+COPY dependencies/slime/pyproject.toml /workdir/dependencies/slime/pyproject.toml
+COPY dependencies/rl_web_agent/pyproject.toml /workdir/dependencies/rl_web_agent/pyproject.toml
+COPY dependencies/bfcl/pyproject.toml /workdir/dependencies/bfcl/pyproject.toml
 RUN mkdir -p /root/.ssh && \
     ssh-keyscan github.com >> /root/.ssh/known_hosts
 
@@ -54,8 +54,8 @@ SH
 
 
 
-RUN cd /workdir && uv run wandb login 5f979adf061882b2252d23ea8472a6fb3c492565
-ENV HF_TOKEN=hf_oLmBzlEDHPbWXsMkLGoNhWbo
+RUN cd /workdir && uv run wandb login YOUR_WANDB_TOKEN
+ENV HF_TOKEN=YOUR_HF_TOKEN
 RUN curl -fsSL https://opencode.ai/install | bash
 RUN cat <<EOF > /root/.opencode/config.json
 {
@@ -64,15 +64,15 @@ RUN cat <<EOF > /root/.opencode/config.json
     "amazon-bedrock": {
       "options": {
         "region": "ap-south-1",
-        "profile": "xianft"
+        "profile": "YOUR_AWS_PROFILE"
       }
     }
   }
 }
 EOF
 RUN <<'EOF' cat >> /root/.aws/config
-[profile xianft]
-role_arn = arn:aws:iam::801953956576:role/crossaccountbedrock
+[profile YOUR_AWS_PROFILE]
+role_arn = YOUR_IAM_ROLE_ARN
 source_profile=default
 max_attempts=100
 retry_mode=adaptive

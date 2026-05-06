@@ -11,7 +11,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONVERT_SCRIPT="${SCRIPT_DIR}/../thirdparty/slime/tools/convert_torch_dist_to_hf.py"
+CONVERT_SCRIPT="${SCRIPT_DIR}/../dependencies/slime/tools/convert_torch_dist_to_hf.py"
 
 INPUT_DIR=""
 OUTPUT_DIR=""

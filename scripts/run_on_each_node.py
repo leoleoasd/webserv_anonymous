@@ -24,7 +24,7 @@ ray job submit --address=auto \
      --config qwen3-30B-A3B
 
 
-s3://yuxuanlu/mcp-data/data_batches/
+s3://YOUR_BUCKET/mcp-data/data_batches/
 """
 
 import argparse

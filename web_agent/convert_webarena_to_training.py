@@ -19,18 +19,18 @@ Usage:
 Examples:
     # Convert all tasks
     python convert_webarena_to_training.py \
-        --tasks-dir thirdparty/rl_web_agent/dataset/train_webarena \
+        --tasks-dir dependencies/rl_web_agent/dataset/train_webarena \
         --output web_agent/data/train.jsonl
 
     # Filter by sites
     python convert_webarena_to_training.py \
-        --tasks-dir thirdparty/rl_web_agent/dataset/test_webarena_lite \
+        --tasks-dir dependencies/rl_web_agent/dataset/test_webarena_lite \
         --output web_agent/data/test.jsonl \
         --sites shopping,shopping_admin
 
     # Single-site tasks only
     python convert_webarena_to_training.py \
-        --tasks-dir thirdparty/rl_web_agent/dataset/train_webarena \
+        --tasks-dir dependencies/rl_web_agent/dataset/train_webarena \
         --output web_agent/data/train_single_site.jsonl \
         --single-site-only
 """
@@ -72,18 +72,18 @@ def main():
 Examples:
     # Convert all training tasks
     python convert_webarena_to_training.py \\
-        --tasks-dir thirdparty/rl_web_agent/dataset/train_webarena \\
+        --tasks-dir dependencies/rl_web_agent/dataset/train_webarena \\
         --output web_agent/data/train.jsonl
 
     # Convert test tasks filtered by sites
     python convert_webarena_to_training.py \\
-        --tasks-dir thirdparty/rl_web_agent/dataset/test_webarena_lite \\
+        --tasks-dir dependencies/rl_web_agent/dataset/test_webarena_lite \\
         --output web_agent/data/test.jsonl \\
         --sites shopping,shopping_admin,gitlab
 
     # Only single-site tasks
     python convert_webarena_to_training.py \\
-        --tasks-dir thirdparty/rl_web_agent/dataset/train_webarena \\
+        --tasks-dir dependencies/rl_web_agent/dataset/train_webarena \\
         --output web_agent/data/train_single_site.jsonl \\
         --single-site-only
 """,

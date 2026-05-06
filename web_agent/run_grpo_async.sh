@@ -103,7 +103,7 @@ RUNTIME_ENV_JSON="{
     \"BROWSER_HEADLESS\": \"${BROWSER_HEADLESS:-true}\",
     \"MAX_CONCURRENT_CONTAINER_LAUNCHES\": \"${MAX_CONCURRENT_CONTAINER_LAUNCHES:-32}\",
     \"MAX_CONCURRENT_CONTAINERS_RUNNING\": \"${MAX_CONCURRENT_CONTAINERS_RUNNING:-512}\",
-    \"AWS_PROFILE\": \"xianft\",
+    \"AWS_PROFILE\": \"YOUR_AWS_PROFILE\",
     \"NUM_ASYNC_ROLLOUT_WORKERS\": \"${NUM_ASYNC_ROLLOUT_WORKERS:-16}\",
     \"MOONCAKE_PROTOCOL\": \"efa\",
     \"FI_PROVIDER\": \"efa\",
@@ -118,7 +118,7 @@ RUNTIME_ENV_JSON="{
 
 ray job submit --address=auto \
    --runtime-env-json="${RUNTIME_ENV_JSON}" \
-   -- python3 ./thirdparty/slime/train_async.py \
+   -- python3 ./dependencies/slime/train_async.py \
    --actor-num-nodes ${ACTOR_NUM_NODES:-2} \
    --actor-num-gpus-per-node ${ACTOR_NUM_GPUS_PER_NODE:-8} \
    --rollout-num-gpus ${ROLLOUT_NUM_GPUS:-8} \

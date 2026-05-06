@@ -1,8 +1,8 @@
 bash launch_ray.sh
 
-s5cmd cp -s --sp s3://yuxuanlu/mcp-data/data_batches/\* /data/mcp-data/data_batches/
-s5cmd cp -s --sp s3://yuxuanlu/mcp-data/mcp_servers_joined.json /data/mcp-data/mcp_servers_joined.json
-s5cmd cp -s --sp s3://yuxuanlu/base_models/Qwen/Qwen3-235B-A22B-Thinking-2507/\* /tmp/instance_storage/Qwen/Qwen3-235B-A22B-Thinking-2507/
+s5cmd cp -s --sp s3://YOUR_BUCKET/mcp-data/data_batches/\* /data/mcp-data/data_batches/
+s5cmd cp -s --sp s3://YOUR_BUCKET/mcp-data/mcp_servers_joined.json /data/mcp-data/mcp_servers_joined.json
+s5cmd cp -s --sp s3://YOUR_BUCKET/base_models/Qwen/Qwen3-235B-A22B-Thinking-2507/\* /tmp/instance_storage/Qwen/Qwen3-235B-A22B-Thinking-2507/
 
 
 bash scripts/download_convert_model.sh \

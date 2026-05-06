@@ -6,7 +6,7 @@
 MODEL_CONFIG=qwen3-30B-A3B
 HF_MODEL_NAME=Qwen/Qwen3-30B-A3B-Thinking-2507
 MODEL_ARGS_ROTARY_BASE=10000000 # thinking 2507
-source "${REPO_ROOT}/thirdparty/slime/scripts/models/${MODEL_CONFIG}.sh"
+source "${REPO_ROOT}/dependencies/slime/scripts/models/${MODEL_CONFIG}.sh"
 
 NUM_ASYNC_ROLLOUT_WORKERS=32
 
