@@ -194,7 +194,7 @@ llm:
 # ============================================================================
 debug: false # Enable debug logging and detailed output
 log_level: DEBUG # Logging level: DEBUG, INFO, WARNING, ERROR
-aws_account_id: 221281446110
+aws_account_id: YOUR_AWS_ACCOUNT_ID
 # ============================================================================
 # HYDRA SETTINGS
 # ============================================================================

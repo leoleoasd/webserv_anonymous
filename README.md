@@ -45,7 +45,7 @@ uv run python dependencies/slime/tools/convert_hf_to_torch_dist.py \
 
 ### 2. Set Up Incus and Web Server Environments
 
-WebServ uses [Incus](https://linuxcontainers.org/incus/) containers with ZFS copy-on-write to manage isolated web server instances for RL rollouts.
+WebServ uses [Incus](https://linuxcontainers.org/incus/) containers with ZFS copy-on-write to manage isolated web server instances for RL rollouts. During training, the system clones from base containers named after each site (e.g., `shopping`, `shopping-admin`, `gitlab`).
 
 #### 2.1 Install Incus
 
@@ -63,29 +63,43 @@ sudo incus admin init
 
 #### 2.2 Import WebArena Docker Images into Incus
 
-Follow the [WebArena documentation](https://github.com/web-arena-x/webarena) to pull the Docker images for the web environments you need (shopping, CMS, GitLab). Then import them into Incus:
+Follow the [WebArena documentation](https://github.com/web-arena-x/webarena) to pull the Docker images for the web environments. Then import them into Incus as base containers.
+
+The base container names must match the site names used in the task configs (see `dependencies/rl_web_agent/rl_web_agent/conf/base.yaml` under `environment.sites`). The code maps site names to base container names by replacing underscores with hyphens (e.g., `shopping_admin` → `shopping-admin`).
+
+Required base containers:
+- `shopping` — WebArena shopping site (port 80)
+- `shopping-admin` — WebArena shopping admin (port 80)
+- `gitlab` — WebArena GitLab (port 8023)
 
 ```bash
-# Export Docker image to tarball
-docker save <webarena_image_name> -o webarena_shopping.tar
+# Example: import the shopping Docker image into Incus
+# 1. Pull and export the WebArena Docker image
+docker pull <webarena_shopping_image>
+docker run -d --name shopping-export <webarena_shopping_image>
+docker export shopping-export > shopping-rootfs.tar
+docker rm -f shopping-export
 
-# Import into Incus as an image
-incus image import webarena_shopping.tar --alias webarena-shopping
+# 2. Create an Incus image from the rootfs
+# (Incus needs metadata; create a minimal metadata.yaml)
+echo -e "architecture: amd64\ncreation_date: $(date +%s)\nproperties:\n  description: WebArena Shopping" > metadata.yaml
+tar cf metadata.tar metadata.yaml
+incus image import metadata.tar shopping-rootfs.tar --alias webarena-shopping
 
-# Create a base container from the image
-incus launch webarena-shopping shopping-base
+# 3. Launch the base container and let services initialize
+incus launch webarena-shopping shopping
+# Wait for the container's web server to become healthy (check with curl)
+# e.g., curl http://$(incus list shopping -f csv -c 4 | cut -d' ' -f1)
 
-# Wait for the container to fully start and services to initialize,
-# then snapshot it (this snapshot is what gets cloned during rollouts)
-incus snapshot shopping-base ready
-incus stop shopping-base
+# 4. Stop the container (it will be cloned from this stopped state)
+incus stop shopping
 ```
 
-Repeat for each site (CMS, GitLab, etc.).
+Repeat for `shopping-admin` and `gitlab`.
 
 #### 2.3 Start the Incus Server
 
-The Incus server is an HTTP API that manages container lifecycle (launch, clone, reset, delete) for the training loop:
+The Incus server is an HTTP API that manages container lifecycle (clone from base, start, health-check, delete) for the training loop. Each rollout clones a fresh container from the stopped base, starts it, and deletes it when done.
 
 ```bash
 uv run python dependencies/rl_web_agent/incus_server.py
@@ -104,7 +118,7 @@ By default it listens on port 8001. Key environment variables:
 Ensure the following services are also running:
 
 - **Ray cluster**: Head node + worker nodes with GPUs
-- **Proxy server**: Host-rewriting proxy for container routing (set `PROXY_SERVER`)
+- **Proxy server**: Host-rewriting proxy for container routing (set `PROXY_SERVER`). The proxy rewrites hostnames in `environment.sites` (e.g., `metis.lti.cs.cmu.edu:7770`) to the actual container IP addresses.
 
 ### 3. Launch GRPO Training
 
