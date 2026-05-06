@@ -43,12 +43,67 @@ uv run python dependencies/slime/tools/convert_hf_to_torch_dist.py \
     --save /path/to/Qwen3-4B_torch_dist/
 ```
 
-### 2. Set Up Infrastructure
+### 2. Set Up Incus and Web Server Environments
 
-Before training, ensure the following services are running:
+WebServ uses [Incus](https://linuxcontainers.org/incus/) containers with ZFS copy-on-write to manage isolated web server instances for RL rollouts.
+
+#### 2.1 Install Incus
+
+```bash
+# Ubuntu/Debian
+sudo apt install incus
+
+# Initialize Incus with ZFS storage backend
+sudo incus admin init
+# When prompted:
+#   - Storage backend: zfs
+#   - Create a new ZFS pool: yes
+#   - Use an existing block device or loop file (your choice)
+```
+
+#### 2.2 Import WebArena Docker Images into Incus
+
+Follow the [WebArena documentation](https://github.com/web-arena-x/webarena) to pull the Docker images for the web environments you need (shopping, CMS, GitLab). Then import them into Incus:
+
+```bash
+# Export Docker image to tarball
+docker save <webarena_image_name> -o webarena_shopping.tar
+
+# Import into Incus as an image
+incus image import webarena_shopping.tar --alias webarena-shopping
+
+# Create a base container from the image
+incus launch webarena-shopping shopping-base
+
+# Wait for the container to fully start and services to initialize,
+# then snapshot it (this snapshot is what gets cloned during rollouts)
+incus snapshot shopping-base ready
+incus stop shopping-base
+```
+
+Repeat for each site (CMS, GitLab, etc.).
+
+#### 2.3 Start the Incus Server
+
+The Incus server is an HTTP API that manages container lifecycle (launch, clone, reset, delete) for the training loop:
+
+```bash
+uv run python dependencies/rl_web_agent/incus_server.py
+```
+
+By default it listens on port 8001. Key environment variables:
+
+| Variable | Purpose | Default |
+|---|---|---|
+| `INCUS_POOL` | ZFS storage pool name | `default` |
+| `MIN_FREE_MEMORY_RATIO` | Minimum free memory before rejecting launches | `0.1` |
+| `THROTTLE_INTERVAL` | Minimum seconds between container launches | `1.0` |
+
+#### 2.4 Other Infrastructure
+
+Ensure the following services are also running:
 
 - **Ray cluster**: Head node + worker nodes with GPUs
-- **Incus server**: Container orchestrator for web environments (set `INCUS_SERVER_URL`)
 - **Proxy server**: Host-rewriting proxy for container routing (set `PROXY_SERVER`)
 
 ### 3. Launch GRPO Training
